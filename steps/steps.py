@@ -5,6 +5,7 @@ import csv
 from page_objects.otomoto_main_page import OtomotoMainPage
 from page_objects.otomoto_result_page import OtomotoResultsPage
 import psycopg2
+import time
 
 # Dane dostępowe z Neon Console
 DB_HOST = 'ep-restless-shadow-a937m71a-pooler.gwc.azure.neon.tech'
@@ -77,6 +78,8 @@ def step_impl(context):
 @When("listuje auta")
 def step_impl(context):
     context.results_page.select_nieuszkodzony()
+    context.driver.execute_script("window.scrollBy(0, 500);")
+    time.sleep(1)
     context.dane_ofert = context.results_page.get_n_offers(n=10)
 
 @Then('zapisuje dane')
