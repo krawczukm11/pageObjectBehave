@@ -29,16 +29,26 @@ def step_impl(context):
 def step_impl(context):
     context.main_page.open_marka_list()
     context.main_page.enter_marka("BMW")
-    context.main_page.select_marka()
+    context.main_page.select_marka(text="BMW")  # Find option by text
     context.main_page.open_model_list()
     context.main_page.enter_model("M3")
-    context.main_page.select_model()
+    context.main_page.select_model(text="M3")  # Find option by text
     context.main_page.click_pokaz_ogloszenia()
 
 @When("listuje auta")
 def step_impl(context):
     context.results_page.select_nieuszkodzony()
     context.dane_ofert = context.results_page.get_n_offers(n=10)
+
+@When('wyszukuje marke "{marka}" i model "{model}"')
+def step_impl(context, marka, model):
+    context.main_page.open_marka_list()
+    context.main_page.enter_marka(marka)
+    context.main_page.select_marka(text=marka)  # Find option by text
+    context.main_page.open_model_list()
+    context.main_page.enter_model(model)
+    context.main_page.select_model(text=model)  # Find option by text
+    context.main_page.click_pokaz_ogloszenia()
 
 @Then('zapisuje dane')
 def step_impl(context):
@@ -52,6 +62,18 @@ def step_impl(context):
         print(f"Dane zostały zapisane do pliku {plik_csv}")
     else:
         print("Nie pobrano żadnych danych, plik CSV nie został utworzony.")
+
+@Then('zapisuje dane do "{plik_csv}"')
+def step_impl(context, plik_csv):
+    if context.dane_ofert:
+        klucze = context.dane_ofert[0].keys()
+        with open(plik_csv, 'w', newline='', encoding='utf-8') as plik_csv_file:
+            dict_writer = csv.DictWriter(plik_csv_file, fieldnames=klucze)
+            dict_writer.writeheader()
+            dict_writer.writerows(context.dane_ofert)
+        print(f"Dane zostały zapisane do pliku {plik_csv}")
+    else:
+        print(f"Nie pobrano żadnych danych, plik {plik_csv} nie został utworzony.")
 
 @Then('close browser')
 def step_impl(context):
