@@ -10,7 +10,7 @@ class OtomotoResultsPage:
         self.tytul_locator = (By.CSS_SELECTOR, 'h2 a')
         self.cena_locator = (By.CSS_SELECTOR, '.offer-price__number')
         self.link_locator = (By.TAG_NAME, 'a')
-        self.stan_auta_button_locator = (By.XPATH, "//input[@placeholder='Stan uszkodzeń']")
+        self.stan_auta_button_locator = (By.XPATH, "(//div[@class='ooa-atvnzm'])[1]")
         self.nieuszkodzony_option_locator = (By.XPATH, "//span[contains(text(),'Nieuszkodzony')]")
 
     def select_nieuszkodzony(self):
