@@ -5,6 +5,5 @@ Feature: showing off behave
     When open otomoto
     When ochrona
     When wyszukuje marke i model
-    When listuje auta
-    Then zapisuje dane
+    When listuje i zapisuje 10 aut
     Then close browser

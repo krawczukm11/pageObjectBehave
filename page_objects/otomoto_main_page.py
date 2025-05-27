@@ -55,7 +55,6 @@ class OtomotoMainPage:
         WebDriverWait(self.driver, 10).until(
             ec.element_to_be_clickable(self.pokaz_ogloszenia_button_locator)
         ).click()
-        # Zamiast czekać na zmianę URL, czekaj na załadowanie elementu na stronie wyników
         WebDriverWait(self.driver, 10).until(
             ec.presence_of_element_located((By.XPATH, "//input[@placeholder='Stan uszkodzeń']"))
         )
