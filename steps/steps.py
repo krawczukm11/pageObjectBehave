@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from page_objects.otomoto_main_page import OtomotoMainPage
 from page_objects.otomoto_result_page import OtomotoResultsPage
+from configuration import polacz, stworz_tabele
 
 # Konfiguracja bazy danych - używaj zmiennych środowiskowych w produkcji
 DB_HOST = ('DB_HOST', 'ep-restless-shadow-a937m71a-pooler.gwc.azure.neon.tech')
@@ -24,42 +25,6 @@ OFFERS_BATCH_SIZE = 5
 # Preferencje Chrome
 CHROME_PREFS = {"download.default_directory": "/Users/maciej/PycharmProjects/behaveProject"}
 
-def polacz():
-    conn = None  # Inicjalizuj conn na None
-    try:
-        conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD, database=DB_NAME)
-        cursor = conn.cursor()
-        cursor.execute("SELECT version();")
-        db_version = cursor.fetchone()
-        print(f"Połączono z PostgreSQL w Neon Tech, wersja: {db_version}")
-        cursor.close()
-        return conn  # Zwróć obiekt połączenia
-    except psycopg2.Error as e:
-        print(f"Błąd połączenia z bazą danych Neon Tech: {e}")
-        if conn:
-            conn.close()
-        return None
-
-def stworz_tabele(conn):
-    if conn:
-        cursor = conn.cursor()
-        try:
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS oferty (
-                    id SERIAL PRIMARY KEY,
-                    tytul TEXT,
-                    link TEXT UNIQUE,
-                    zdjecie TEXT,
-                    cena TEXT,
-                    telefon TEXT
-                )
-            ''')
-            conn.commit()
-            print("Tabela 'oferty' została utworzona (lub już istnieje).")
-        except psycopg2.Error as e:
-            print(f"Błąd podczas tworzenia tabeli 'oferty': {e}")
-            conn.rollback()  # Wycofaj transakcję w przypadku błędu
-        cursor.close()
 
 
 def zapisz_oferty_do_bazy_batch(oferty):
@@ -141,10 +106,14 @@ def zapisz_do_csv(oferty, nazwa_pliku):
         print(f"❌ Błąd podczas zapisywania do CSV: {e}")
         return False
 
-
-# =============================================================================
-# BEHAVE STEP DEFINITIONS
-# =============================================================================
+@Given('baza polaczona')
+def step_impl(context):
+    conn = polacz()
+    if conn:
+        stworz_tabele(conn)
+        conn.close()
+if __name__ == "__main__":
+    step_impl
 
 @Given('launch chrome browser')
 def step_impl(context):
@@ -253,22 +222,4 @@ def step_close_browser(context):
         print("🔚 Przeglądarka została zamknięta")
 
 
-# =============================================================================
-# INICJALIZACJA - uruchomienie przy bezpośrednim wywołaniu skryptu
-# =============================================================================
 
-if __name__ == "__main__":
-    print("🔧 Inicjalizacja bazy danych...")
-    conn = polacz()
-    if conn:
-        stworz_tabele(conn)
-        conn.close()
-        print("✅ Baza danych została zainicjalizowana")
-    else:
-        print("❌ Nie udało się połączyć z bazą danych")
-        print("💡 Sprawdź zmienne środowiskowe:")
-        print("   - DB_HOST")
-        print("   - DB_PORT")
-        print("   - DB_USER")
-        print("   - DB_PASSWORD")
-        print("   - DB_NAME")
