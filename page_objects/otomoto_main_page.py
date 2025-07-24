@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.keys import Keys
 
 class OtomotoMainPage:
     def __init__(self, driver: WebDriver):
@@ -11,7 +12,7 @@ class OtomotoMainPage:
         self.marka_bmw_option_locator = (By.CLASS_NAME, "ooa-18p1sko")
         self.model_pojazdu_button_locator = (By.XPATH, "(//div[@class='ooa-1xfqg6o'])[2]")
         self.model_pojazdu_input_locator = (By.XPATH, "//div[@aria-expanded='true']//input[@type='text']")
-        self.model_m3_option_locator = (By.CLASS_NAME, "ooa-1w8r0f0")
+        self.model_m3_option_locator = (By.CLASS_NAME, "ooa-1xvc8za")
         self.pokaz_ogloszenia_button_locator = (By.XPATH, "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/main[1]/div[1]/article[1]/article[1]/fieldset[1]/form[1]/section[2]/button[1]")
         self.ochrona_danych_locator = (By.ID, "onetrust-button-group-parent")
         self.accept_button_locator = (By.ID, "onetrust-accept-btn-handler")

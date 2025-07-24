@@ -35,7 +35,6 @@ def stworz_tabele(conn):
                     link TEXT UNIQUE,
                     zdjecie TEXT,
                     cena TEXT,
-                    telefon TEXT
                 )
             ''')
             conn.commit()
