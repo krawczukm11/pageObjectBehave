@@ -1,10 +1,10 @@
 import psycopg2
 
 # Dane dostępowe z Neon Console
-DB_HOST = 'ep-restless-shadow-a937m71a-pooler.gwc.azure.neon.tech'
+DB_HOST = 'ep-winter-field-abeupvke-pooler.eu-west-2.aws.neon.tech'
 DB_PORT = '5432'
 DB_USER = 'neondb_owner'
-DB_PASSWORD = 'npg_A2Snkh5ZTLvG'
+DB_PASSWORD = 'npg_gzn8uDxjW4sr'
 DB_NAME = 'neondb'
 
 
@@ -34,7 +34,7 @@ def stworz_tabele(conn):
                     tytul TEXT,
                     link TEXT UNIQUE,
                     zdjecie TEXT,
-                    cena TEXT,
+                    cena TEXT
                 )
             ''')
             conn.commit()

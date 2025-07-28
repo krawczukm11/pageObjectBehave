@@ -10,10 +10,10 @@ from page_objects.otomoto_result_page import OtomotoResultsPage
 from configuration import polacz, stworz_tabele
 
 # Konfiguracja bazy danych - używaj zmiennych środowiskowych w produkcji
-DB_HOST = ('DB_HOST', 'ep-restless-shadow-a937m71a-pooler.gwc.azure.neon.tech')
+DB_HOST = ('DB_HOST', 'ep-winter-field-abeupvke-pooler.eu-west-2.aws.neon.tech')
 DB_PORT = ('DB_PORT', '5432')
 DB_USER = ('DB_USER', 'neondb_owner')
-DB_PASSWORD = ('DB_PASSWORD', 'npg_A2Snkh5ZTLvG')  # UWAGA: Ustaw w zmiennych środowiskowych!
+DB_PASSWORD = ('DB_PASSWORD', 'npg_gzn8uDxjW4sr')  # UWAGA: Ustaw w zmiennych środowiskowych!
 DB_NAME = ('DB_NAME', 'neondb')
 
 @Given('baza polaczona')
