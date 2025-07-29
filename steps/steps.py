@@ -8,13 +8,13 @@ from selenium.webdriver.chrome.options import Options
 from page_objects.otomoto_main_page import OtomotoMainPage
 from page_objects.otomoto_result_page import OtomotoResultsPage
 from configuration import polacz, stworz_tabele
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.remote.webdriver import WebDriver
+from webdriver_manager.chrome import ChromeDriverManager
+service = Service(ChromeDriverManager().install())
 
-# Konfiguracja bazy danych - używaj zmiennych środowiskowych w produkcji
-DB_HOST = ('DB_HOST', 'ep-winter-field-abeupvke-pooler.eu-west-2.aws.neon.tech')
-DB_PORT = ('DB_PORT', '5432')
-DB_USER = ('DB_USER', 'neondb_owner')
-DB_PASSWORD = ('DB_PASSWORD', 'npg_gzn8uDxjW4sr')  # UWAGA: Ustaw w zmiennych środowiskowych!
-DB_NAME = ('DB_NAME', 'neondb')
 
 @Given('baza polaczona')
 def step_impl(context):
@@ -53,20 +53,51 @@ def step_impl(context):
     context.main_page.select_model()
     context.main_page.click_pokaz_ogloszenia()
 
-@When("listuje i zapisuje 10 aut")
+@When("listuje auta")
 def step_list_and_save_cars(context):
     context.results_page.select_bezwypadkowy()
     context.driver.execute_script("window.scrollBy(0, 300);")
-    time.sleep(1)
-    #context.results_page.select_nieuszkodzony()
-    #context.results_page.scrap_data()
+    context.results_page.select_najtansze()
+    time.sleep(30)
+
+@When("zapisuje linki")
+def scrap_data(context):
+    with webdriver.Chrome(service=service) as driver:
+        time.sleep(30)
+        links = driver.find_elements(By.XPATH, '//div[@class="ooa-r53y0q e1612gp011"]//a[@href]')
+        hrefs = []
+
+        for link in links:
+            hrefs.append(link.get_attribute('href'))
+
+        nazwy = driver.find_elements(By.XPATH, '//div[@class="ooa-j7qwjs e1owtbrj0"]//h2')
+        nazw = []
+
+        for nazwa in nazwy:
+            nazw.append(nazwa.text)
+
+        obrazki = driver.find_elements(By.XPATH, '//article[@class="e1or3qgp1 ooa-yjw0j9 e1or3qgp0"]//img')
+        zdjecia = []
+
+        for obrazek in obrazki:
+            src = obrazek.get_attribute("src")
+            zdjecia.append(src)
+
+        ceny = driver.find_elements(By.XPATH, '//section[@class="ooa-k008qs e1rwha5u1"]//h4//span')
+        cena = []
+
+        for cenka in ceny:
+            cena.append(cenka.text)
+
+        print(hrefs)
+        print(nazw)
+        print(zdjecia)
+        print(cena)
 
 @Then('close browser')
 def step_close_browser(context):
-    """Zamyka przeglądarkę"""
     if hasattr(context, 'driver'):
         context.driver.quit()
-        print("🔚 Przeglądarka została zamknięta")
 
 
 
