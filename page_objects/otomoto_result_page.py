@@ -19,7 +19,7 @@ with webdriver.Chrome(service=service) as driver:
             self.pokaz_wyniki_locator = (By.XPATH, "//button")
             self.links_locator = (By.XPATH, './/div[@class="etydmma0 ooa-16c293i"]/a')
 
-        def bezwypadkowy(self):
+        def select_bezwypadkowy(self):
             WebDriverWait(self.driver, 10).until(
                 ec.element_to_be_clickable(self.wiecej_filtrow_locator)
             ).click()
@@ -34,7 +34,7 @@ with webdriver.Chrome(service=service) as driver:
             ).click()
             WebDriverWait(self.driver, 30)
 
-        def link(self):
+        def scrap_data(self):
             links = driver.find_elements(By.XPATH, '//div[@class="ooa-r53y0q e1612gp011"]//a[@href]')
             hrefs = []
 

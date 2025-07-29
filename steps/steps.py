@@ -55,9 +55,11 @@ def step_impl(context):
 
 @When("listuje i zapisuje 10 aut")
 def step_list_and_save_cars(context):
-    context.results_page.bezwypadkowy()
+    context.results_page.select_bezwypadkowy()
+    context.driver.execute_script("window.scrollBy(0, 300);")
+    time.sleep(1)
     #context.results_page.select_nieuszkodzony()
-    #context.results_page.link()
+    #context.results_page.scrap_data()
 
 @Then('close browser')
 def step_close_browser(context):
