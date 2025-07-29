@@ -13,27 +13,29 @@ with webdriver.Chrome(service=service) as driver:
     class OtomotoResultsPage:
         def __init__(self, driver: WebDriver):
             self.driver = driver
-            self.stan_auta_button_locator = (By.XPATH, "(//div[contains(@role,'group')])[12]")
-            self.nieuszkodzony_option_locator = (By.CSS_SELECTOR, 'input[value="Nieuszkodzony"]') ###ISSUE IS HERE!!!1
+            self.wiecej_filtrow_locator = (By.XPATH, "(//div[@class='ooa-1md513v e1h8zeny4'])[1]")
+            self.status_pojazdu_locator = (By.XPATH, "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/section[1]/article[2]/div[2]/div[1]/div[1]/button[1]")
+            self.bezwypadkowy_locator = (By.XPATH, "(//input[@id='Bezwypadkowy'])[1]")
+            self.pokaz_wyniki_locator = (By.XPATH, "//button")
             self.links_locator = (By.XPATH, './/div[@class="etydmma0 ooa-16c293i"]/a')
 
-        def click_nieuszkodzony_filter(self):
-            button = self.driver.find_element(*self.stan_auta_button_locator)
-            button.click()
-            option = self.driver.find_element(*self.nieuszkodzony_option_locator)
-            option.click()
-
-        def select_nieuszkodzony(self):
+        def bezwypadkowy(self):
             WebDriverWait(self.driver, 10).until(
-                ec.element_to_be_clickable(self.stan_auta_button_locator)
+                ec.element_to_be_clickable(self.wiecej_filtrow_locator)
             ).click()
             WebDriverWait(self.driver, 10).until(
-                ec.visibility_of_element_located(self.nieuszkodzony_option_locator)
+                ec.element_to_be_clickable(self.status_pojazdu_locator)
+            ).click()
+            WebDriverWait(self.driver, 10).until(
+                ec.element_to_be_clickable(self.bezwypadkowy_locator)
+            ).click()
+            WebDriverWait(self.driver, 10).until(
+                ec.element_to_be_clickable(self.pokaz_wyniki_locator)
             ).click()
             WebDriverWait(self.driver, 30)
 
         def link(self):
-            links = driver.find_elements(By.XPATH, '//section[@class="ooa-o5rf8l e14w1bje0"]//a[@href]')
+            links = driver.find_elements(By.XPATH, '//div[@class="ooa-r53y0q e1612gp011"]//a[@href]')
             hrefs = []
 
             for link in links:
